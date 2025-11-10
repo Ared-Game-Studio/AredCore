@@ -143,12 +143,12 @@ namespace Ared.AutoSheetData.Editor
                             EditorGUILayout.LabelField(col.columnName, GUILayout.MinWidth(120));
                             col.type = (EColumnType)EditorGUILayout.EnumPopup(col.type, GUILayout.MaxWidth(120));
                             //GUILayout.FlexibleSpace();
-                            // if (GUILayout.Button("X", GUILayout.Width(24)))
-                            // {
-                            //     s.columns.RemoveAt(i);
-                            //     i--;
-                            //     continue;
-                            // }
+                             if (GUILayout.Button("X", GUILayout.Width(24)))
+                             {
+                                 s.columns.RemoveAt(i);
+                                 i--;
+                                 continue;
+                             }
                         }
                         // Draw a horizontal separator between columns
                         if (i < s.columns.Count - 1)
