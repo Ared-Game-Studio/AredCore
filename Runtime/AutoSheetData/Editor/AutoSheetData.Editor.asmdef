@@ -1,0 +1,19 @@
+{
+    "name": "AutoSheetData.Editor",
+    "rootNamespace": "Ared.Core",
+    "references": [
+        "GUID:7e4fb08fa6780a24dacd2e4b01db4329",
+        "GUID:0347f696cb6600744a62643a473dcc8d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

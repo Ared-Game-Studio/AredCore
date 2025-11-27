@@ -1,6 +1,6 @@
 {
     "name": "aredstudio.core.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "Ared.Core",
     "references": [
         "GUID:0347f696cb6600744a62643a473dcc8d"
     ],

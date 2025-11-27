@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ared.AutoSheetData.Data
+﻿namespace Ared.Core.AutoSheetData.Data
 {
     public enum EColumnType
     {

@@ -1,7 +1,11 @@
 {
     "name": "aredstudio.core",
-    "rootNamespace": "",
-    "references": [],
+    "rootNamespace": "Ared.Core",
+    "references": [
+        "GUID:0032ab043ec460c4ca5e0b7c48ee39b0",
+        "GUID:5ab00dcc407850e4ab7eb164ac7b1dca",
+        "GUID:7e4fb08fa6780a24dacd2e4b01db4329"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

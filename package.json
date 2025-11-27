@@ -1,6 +1,6 @@
 {
   "name": "co.aredstudio.core",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "displayName": "Ared Core",
   "description": "Ared Core Tools & Utilities",
   "unity": "2022.3",
@@ -8,7 +8,6 @@
   "licensesUrl": "LICENSE.md",
   "dependencies": {
     "com.unity.modules.unitywebrequest": "1.0.0"
- },
+  },
   "author": "AredGameStudio"
 }
-

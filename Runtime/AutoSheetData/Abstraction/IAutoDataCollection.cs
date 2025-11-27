@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ared.AutoSheetData.Abstraction
+namespace Ared.Core.AutoSheetData.Abstraction
 {
     public interface IAutoDataCollection<T>
     {

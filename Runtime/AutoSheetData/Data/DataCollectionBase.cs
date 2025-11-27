@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Ared.AutoSheetData.Abstraction;
+using Ared.Core.AutoSheetData.Abstraction;
 using UnityEngine;
 
-namespace Ared.AutoSheetData.Data
+namespace Ared.Core.AutoSheetData.Data
 {
     public abstract class DataCollectionBase : ScriptableObject
     {

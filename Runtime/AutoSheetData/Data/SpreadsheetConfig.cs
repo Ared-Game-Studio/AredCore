@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Ared.AutoSheetData.Data
+namespace Ared.Core.AutoSheetData.Data
 {
     [CreateAssetMenu(menuName = "AutoSheetData/Spreadsheet Config", fileName = "SpreadsheetConfig")]
     public class SpreadsheetConfig : ScriptableObject
