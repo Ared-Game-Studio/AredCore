@@ -62,7 +62,7 @@ namespace Ared.Core.AutoSheetData.Editor
         private void EnsureConfigExists()
         {
             // Try find existing
-            var guids = AssetDatabase.FindAssets("t:AutoSheetData.Data.SpreadsheetConfig");
+            var guids = AssetDatabase.FindAssets("t:Ared.Core.AutoSheetData.Data.SpreadsheetConfig");
             if (guids != null && guids.Length > 0)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guids[0]);

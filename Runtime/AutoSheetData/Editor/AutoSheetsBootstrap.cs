@@ -16,7 +16,7 @@ namespace Ared.Core.AutoSheetData.Editor
 
         private static void EnsureCollectionsExist()
         {
-            var guids = AssetDatabase.FindAssets("t:AutoSheetData.Data.SpreadsheetConfig");
+            var guids = AssetDatabase.FindAssets("t:Ared.Core.AutoSheetData.Data.SpreadsheetConfig");
             foreach (var guid in guids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
