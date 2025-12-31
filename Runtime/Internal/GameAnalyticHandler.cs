@@ -72,53 +72,131 @@ namespace Ared.Core.Internal
 #endif
         }
 
-        public static void StartTutorial(string tutorialKey, string LevelId, int levelIndex)
+        public static void StartTutorial(string tutorialKey, string step1 = null, string step2 = null)
         {
             if (!_isInitialized) return;
 #if UNITY_EDITOR
-            LogAnalyticsEvent("Tutorial", $"Start: {tutorialKey}", $"LevelId: {LevelId}, Index: {levelIndex}");
+            LogAnalyticsEvent("Tutorial", $"Start: {tutorialKey}", $"{(step1 != null ? $", {step1}_" : "")} {(step2 != null ? $", {step2}" : "")}");
 #else
-            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, tutorialKey, levelIndex);
+            if (step1 != null && step2 != null)
+            {
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, tutorialKey, step1, step2);
+            }
+            else if (step1 != null)
+            {
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, tutorialKey, step1);
+            }
+            else
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, tutorialKey);
 #endif
         }
 
-        public static void CompleteTutorial(string tutorialKey, string LevelId, int levelIndex)
+        public static void CompleteTutorial(string tutorialKey, string step1 = null, string step2 = null)
         {
             if (!_isInitialized) return;
 #if UNITY_EDITOR
-            LogAnalyticsEvent("Tutorial", $"Complete: {tutorialKey}", $"LevelId: {LevelId}, Index: {levelIndex}");
+            LogAnalyticsEvent("Tutorial", $"Complete: {tutorialKey}", $"{(step1 != null ? $", {step1}_" : "")} {(step2 != null ? $", {step2}" : "")}");
 #else
-            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, tutorialKey, levelIndex);
+            if (step1 != null && step2 != null)
+            {
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, tutorialKey, step1, step2);
+            }
+            else if (step1 != null)
+            {
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, tutorialKey, step1);
+            }
+            else
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, tutorialKey);
 #endif
         }
 
-        public static void StartLevel(string levelId, int levelIndex, int? score)
+        public static void StartLevel(string levelId, string step1 = null, string step2 = null, int? score = null)
         {
             if (!_isInitialized) return;
 #if UNITY_EDITOR
-            LogAnalyticsEvent("Level", $"Start: {levelId}", $"Index: {levelIndex}, Score: {score}");
+            LogAnalyticsEvent("Level", $"Start: {levelId}", $"{(step1 != null ? $", {step1}_" : "")} {(step2 != null ? $", {step2}" : "")} | Score: {score}");
 #else
-            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, levelId, levelIndex.ToString());
+            if (step1 != null && step2 != null)
+            {
+                if (score.HasValue)
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, levelId, step1, step2, score.Value);
+                else
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, levelId, step1, step2);
+            }
+            else if (step1 != null)
+            {
+                if (score.HasValue)
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, levelId, step1, score.Value);
+                else
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, levelId, step1);
+            }
+            else
+            {
+                if (score.HasValue)
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, levelId, score.Value);
+                else
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, levelId);
+            }
 #endif
         }
 
-        public static void LevelCompleted(string levelId, int levelIndex, int? score)
+        public static void LevelCompleted(string levelId, string step1 = null, string step2 = null, int? score = null)
         {
             if (!_isInitialized) return;
 #if UNITY_EDITOR
-            LogAnalyticsEvent("Level", $"Complete: {levelId}", $"Index: {levelIndex}, Score: {score}");
+            LogAnalyticsEvent("Level", $"Complete: {levelId}", $"{(step1 != null ? $", {step1}_" : "")} {(step2 != null ? $", {step2}" : "")} | Score: {score}");
 #else
-            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, levelId, levelIndex.ToString());
+            if (step1 != null && step2 != null)
+            {
+                if (score.HasValue)
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, levelId, step1, step2, score.Value);
+                else
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, levelId, step1, step2);
+            }
+            else if (step1 != null)
+            {
+                if (score.HasValue)
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, levelId, step1, score.Value);
+                else
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, levelId, step1);
+            }
+            else
+            {
+                if (score.HasValue)
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, levelId, score.Value);
+                else
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, levelId);
+            }
 #endif
         }
 
-        public static void LevelFailed(string levelId, int levelIndex, int? score)
+        public static void LevelFailed(string levelId, string step1 = null, string step2 = null, int? score = null)
         {
             if (!_isInitialized) return;
 #if UNITY_EDITOR
-            LogAnalyticsEvent("Level", $"Failed: {levelId}", $"Index: {levelIndex}, Score: {score}");
+            LogAnalyticsEvent("Level", $"Failed: {levelId}", $"{(step1 != null ? $", {step1}_" : "")} {(step2 != null ? $", {step2}" : "")} | Score: {score}");
 #else
-            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, levelId, levelIndex.ToString());
+            if (step1 != null && step2 != null)
+            {
+                if (score.HasValue)
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, levelId, step1, step2, score.Value);
+                else
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, levelId, step1, step2);
+            }
+            else if (step1 != null)
+            {
+                if (score.HasValue)
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, levelId, step1, score.Value);
+                else
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, levelId, step1);
+            }
+            else
+            {
+                if (score.HasValue)
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, levelId, score.Value);
+                else
+                    GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, levelId);
+            }
 #endif
         }
 
