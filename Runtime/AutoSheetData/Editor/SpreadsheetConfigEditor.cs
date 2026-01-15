@@ -27,26 +27,22 @@ namespace Ared.Core.AutoSheetData.Editor
             _config = (SpreadsheetConfig)target;
             
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Google Sheet URL", EditorStyles.boldLabel);
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                _urlInput = EditorGUILayout.TextField("Public URL", _urlInput);
-                if (GUILayout.Button("Parse", GUILayout.Width(80)))
-                {
-                    if (TryExtractSpreadsheetIdFromUrl(_urlInput, out var id))
-                    {
-                        _config.spreadsheetId = id;
-                        EditorUtility.SetDirty(_config);
-                        _status = "Parsed Spreadsheet ID.";
-                    }
-                    else
-                    {
-                        _status = "Failed to parse Spreadsheet ID from URL.";
-                        LogWarning("[AutoSheetData] Could not parse Spreadsheet ID from provided URL.");
-                    }
-                }
-            }
             
+            // Data Source Selection
+            EditorGUILayout.LabelField("Data Source", EditorStyles.boldLabel);
+            _config.source = (ESpreadsheetSourceType)EditorGUILayout.EnumPopup("Source Type", _config.source);
+            
+            EditorGUILayout.Space(10);
+
+            if (_config.source == ESpreadsheetSourceType.GoogleSheets)
+            {
+                DrawGoogleSheetFields();
+            }
+            else if (_config.source == ESpreadsheetSourceType.Excel)
+            {
+                DrawLocalExcelFields();
+            }
+
             EditorGUILayout.Space(20);
 
             DrawConfigFields();
@@ -74,6 +70,14 @@ namespace Ared.Core.AutoSheetData.Editor
             {
                 EditorGUILayout.LabelField("Sheets", EditorStyles.boldLabel);
                 GUILayout.FlexibleSpace();
+                
+                // Add button to load sheets from Excel file
+                if (_config.source == ESpreadsheetSourceType.Excel && !string.IsNullOrWhiteSpace(_config.excelFilePath))
+                {
+                    if (GUILayout.Button("Load Sheets from Excel", GUILayout.Width(150)))
+                        LoadSheetsFromExcel();
+                }
+                
                 if (GUILayout.Button("+ Add Sheet", GUILayout.Width(110)))
                     AddSheet();
             }
@@ -123,7 +127,10 @@ namespace Ared.Core.AutoSheetData.Editor
                 // Quick actions row
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUI.BeginDisabledGroup(_isBusy || string.IsNullOrWhiteSpace(_config.spreadsheetId) || string.IsNullOrWhiteSpace(s.sheetName));
+                    bool canLoad = !string.IsNullOrWhiteSpace(s.sheetName) && 
+                                   ((_config.source == ESpreadsheetSourceType.GoogleSheets && !string.IsNullOrWhiteSpace(_config.spreadsheetId)) ||
+                                    (_config.source == ESpreadsheetSourceType.Excel && !string.IsNullOrWhiteSpace(_config.excelFilePath)));
+                    EditorGUI.BeginDisabledGroup(_isBusy || !canLoad);
                     if (GUILayout.Button("Load/Refresh Columns", GUILayout.Width(180)))
                         _ = LoadColumnsAsync(s);
                     EditorGUI.EndDisabledGroup();
@@ -182,10 +189,100 @@ namespace Ared.Core.AutoSheetData.Editor
             if (GUI.changed)
                 EditorUtility.SetDirty(_config);
         }
+        
+        private void DrawGoogleSheetFields()
+        {
+            EditorGUILayout.LabelField("Google Sheet Config", EditorStyles.boldLabel);
+            using (new EditorGUILayout. HorizontalScope())
+            {
+                _urlInput = EditorGUILayout.TextField("Public URL", _urlInput);
+                if (GUILayout.Button("Parse", GUILayout.Width(80)))
+                {
+                    if (TryExtractSpreadsheetIdFromUrl(_urlInput, out var id))
+                    {
+                        _config.spreadsheetId = id;
+                        EditorUtility.SetDirty(_config);
+                        _status = "Parsed Spreadsheet ID. ";
+                    }
+                    else
+                    {
+                        _status = "Failed to parse Spreadsheet ID from URL.";
+                        LogWarning("[AutoSheetData] Could not parse Spreadsheet ID from provided URL.");
+                    }
+                }
+            }
+            _config.spreadsheetId = EditorGUILayout.TextField("Spreadsheet ID", _config.spreadsheetId);
+        }
+        
+        private void DrawLocalExcelFields()
+        {
+            EditorGUILayout.LabelField("Excel Config", EditorStyles.boldLabel);
+            
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.PrefixLabel("Excel File");
+                if (GUILayout.Button(string.IsNullOrEmpty(_config.excelFilePath) ? "Select File..." : _config.excelFilePath, EditorStyles.objectField))
+                {
+                    string path = EditorUtility.OpenFilePanel("Select Excel File" , Application.dataPath, "xlsx,xls");
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        // Convert to relative path if possible
+                        string projectRoot = Path.GetFullPath(Application.dataPath).Replace("\\", "/").Replace("/Assets", "");
+                        if (path.StartsWith(projectRoot))
+                        {
+                            path = path.Substring(projectRoot.Length + 1);
+                        }
+                        _config.excelFilePath = path;
+                        EditorUtility.SetDirty(_config);
+                    }
+                }
+            }
+        }
+        
+        private void LoadSheetsFromExcel()
+        {
+            if (string.IsNullOrEmpty(_config.excelFilePath))
+            {
+                ShowError("No Excel file selected.");
+                return;
+            }
+
+            try
+            {
+                string assetPath = _config.excelFilePath;
+                var fullPath = Path.GetFullPath(assetPath);
+                var sheetNames = LocalExcelReader.GetSheetNames(fullPath);
+
+                foreach (var sheetName in sheetNames)
+                {
+                    // Check if sheet already exists
+                    if (_config.Sheets.Any(s => s.sheetName. Equals(sheetName, StringComparison.OrdinalIgnoreCase)))
+                        continue;
+
+                    var newSheet = new SpreadsheetConfig.SheetSelection
+                    {
+                        sheetName = sheetName,
+                        selected = true
+                    };
+                    var (rowName, collName) = CodeGenerator.ComputeTypeNames(newSheet.sheetName);
+                    newSheet.rowClassName = rowName;
+                    newSheet. collectionClassName = collName;
+                    newSheet.expectedAssetPath = BuildCollectionAssetPath(_config, newSheet);
+                    _config.Sheets. Add(newSheet);
+                }
+
+                EditorUtility.SetDirty(_config);
+                _status = $"Loaded {sheetNames.Count} sheet(s) from Excel file. ";
+                Log($"[AutoSheetData] Loaded sheets from Excel: {string.Join(", ", sheetNames)}");
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to load sheets from Excel: {ex.Message}");
+            }
+        }
 
         private void DrawConfigFields()
         {
-            _config.spreadsheetId = EditorGUILayout.TextField("Spreadsheet ID", _config.spreadsheetId);
             _config.generatedNamespace = EditorGUILayout.TextField("Namespace", _config.generatedNamespace);
             _config.autoCreateCollections = EditorGUILayout.Toggle("Auto Create Collections", _config.autoCreateCollections);
         }
@@ -213,7 +310,22 @@ namespace Ared.Core.AutoSheetData.Editor
                 _status = $"Loading columns for '{sheet.sheetName}'...";
                 Repaint();
 
-                var rows = await PublicSheetsClient.FetchValuesCsvByNameAsync(_config.spreadsheetId, sheet.sheetName);
+                List<List<string>> rows;
+
+                if (_config.source == ESpreadsheetSourceType.GoogleSheets)
+                {
+                    rows = await PublicSheetsClient.FetchValuesCsvByNameAsync(_config.spreadsheetId, sheet.sheetName);
+                }
+                else
+                {
+                    // Local Excel file
+                    rows = await Task.Run(() =>
+                    {
+                        var fullPath = Path.GetFullPath(_config.excelFilePath);
+                        return LocalExcelReader.ReadSheet(fullPath, sheet.sheetName);
+                    });
+                }
+                 
                 var headers = rows.Count > 0 ? rows[0] : new List<string>();
                 var dataRows = rows.Count > 1 ? rows.Skip(1).ToList() : new List<List<string>>();
 
@@ -468,9 +580,23 @@ namespace Ared.Core.AutoSheetData.Editor
                         AssetDatabase.CreateAsset(instance, s.expectedAssetPath);
                         asset = instance;
                     }
-
-                    // Fetch rows and headers using the correct endpoint (by sheet name)
-                    var rows = await PublicSheetsClient.FetchValuesCsvByNameAsync(_config.spreadsheetId, s.sheetName);
+                    
+                    
+                    // Fetch rows and headers based on data source
+                    List<List<string>> rows;
+                    if (_config.source == ESpreadsheetSourceType.GoogleSheets)
+                    {
+                        rows = await PublicSheetsClient.FetchValuesCsvByNameAsync(_config.spreadsheetId, s.sheetName);
+                    }
+                    else
+                    {
+                        rows = await Task.Run(() =>
+                        {
+                            string fullPath = Path. GetFullPath(_config.excelFilePath);
+                            return LocalExcelReader.ReadSheet(fullPath, s.sheetName);
+                        });
+                    }
+                    
                     if (rows.Count == 0)
                     {
                         LogWarning($"[AutoSheetData] No data in sheet '{s.sheetName}'.");

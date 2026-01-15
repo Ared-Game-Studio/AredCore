@@ -4,12 +4,24 @@ using UnityEngine;
 
 namespace Ared.Core.AutoSheetData.Data
 {
+    public enum ESpreadsheetSourceType
+    {
+        GoogleSheets,
+        Excel
+    }
+    
     [CreateAssetMenu(menuName = "AutoSheetData/Spreadsheet Config", fileName = "SpreadsheetConfig")]
     public class SpreadsheetConfig : ScriptableObject
     {
+        [Header("Source Settings")]
+        public ESpreadsheetSourceType source = ESpreadsheetSourceType.GoogleSheets;
+        
         [Header("Google Sheets (Public)")]
         [Tooltip("The ID part from https://docs.google.com/spreadsheets/d/{THIS_PART}/")]
         public string spreadsheetId;
+        
+        [Header("Local Excel Settings")]
+        public string excelFilePath; // Relative path from Assets folder
         
         [Header("Generation")]
         [Tooltip("C# namespace for generated row and collection classes.")]
