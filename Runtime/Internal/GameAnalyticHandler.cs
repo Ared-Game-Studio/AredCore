@@ -255,7 +255,7 @@ namespace Ared.Core.Internal
                 message += $" | {details}";
             }
 
-            Logger.Log(message, Logger.LogOrigin.Analytics);
+            Logger.Log(message, ELogOrigin.Analytics);
         }
 #endif
     }

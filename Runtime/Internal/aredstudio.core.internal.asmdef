@@ -1,0 +1,16 @@
+{
+    "name": "aredstudio.core.internal",
+    "rootNamespace": "Ared.Core",
+    "references": [
+        "GUID:5ab00dcc407850e4ab7eb164ac7b1dca"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

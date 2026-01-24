@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using UnityEditor;
 using GooglePlayServices;
+using Ared.Core.Internal;
 using Logger = Ared.Core.Internal.Logger;
 
 namespace Ared.Core.Editor
@@ -16,11 +17,11 @@ namespace Ared.Core.Editor
         {
             if (SessionState.GetBool("AredCore_DependenciesResolved", false)) return;
             
-            Logger.Log("Forcing Android Dependency Resolution...", Logger.LogOrigin.System);
+            Logger.Log("Forcing Android Dependency Resolution...", ELogOrigin.System);
             
             PlayServicesResolver.Resolve(null, false, (success) => {
-                if (success) Logger.Log("Resolution Complete!", Logger.LogOrigin.System);
-                else Logger.LogError("Resolution Failed. Check Console.", Logger.LogOrigin.System);
+                if (success) Logger.Log("Resolution Complete!", ELogOrigin.System);
+                else Logger.LogError("Resolution Failed. Check Console.", ELogOrigin.System);
             });
 
             SessionState.SetBool("AredCore_DependenciesResolved", true);

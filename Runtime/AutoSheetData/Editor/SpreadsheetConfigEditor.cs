@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Ared.Core.AutoSheetData.Data;
 using UnityEditor;
 using UnityEngine;
+using Ared.Core.Internal;
 using Logger = Ared.Core.Internal.Logger;
 
 namespace Ared.Core.AutoSheetData.Editor
@@ -750,11 +751,11 @@ namespace Ared.Core.AutoSheetData.Editor
         private void ShowError(string msg)
         {
             _status = msg;
-            Logger.LogError(msg, Logger.LogOrigin.AutoSheetData);
+            Logger.LogError(msg, ELogOrigin.AutoSheetData);
         }
         
-        private static void Log(string message) => Logger.Log(message, Logger.LogOrigin.AutoSheetData);
-        private static void LogWarning(string message) => Logger.LogWarning(message, Logger.LogOrigin.AutoSheetData);
-        private static void LogError(string message) => Logger.LogError(message, Logger.LogOrigin.AutoSheetData);
+        private static void Log(string message) => Logger.Log(message, ELogOrigin.AutoSheetData);
+        private static void LogWarning(string message) => Logger.LogWarning(message, ELogOrigin.AutoSheetData);
+        private static void LogError(string message) => Logger.LogError(message, ELogOrigin.AutoSheetData);
     }
 }

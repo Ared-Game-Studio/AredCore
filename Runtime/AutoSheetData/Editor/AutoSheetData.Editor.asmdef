@@ -3,7 +3,7 @@
     "rootNamespace": "Ared.Core",
     "references": [
         "GUID:7e4fb08fa6780a24dacd2e4b01db4329",
-        "GUID:0347f696cb6600744a62643a473dcc8d"
+        "GUID:06ff281547f7320439e39b5d6264750a"
     ],
     "includePlatforms": [
         "Editor"

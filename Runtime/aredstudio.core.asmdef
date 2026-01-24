@@ -2,9 +2,13 @@
     "name": "aredstudio.core",
     "rootNamespace": "Ared.Core",
     "references": [
+        "GUID:06ff281547f7320439e39b5d6264750a",
         "GUID:0032ab043ec460c4ca5e0b7c48ee39b0",
         "GUID:5ab00dcc407850e4ab7eb164ac7b1dca",
-        "GUID:7e4fb08fa6780a24dacd2e4b01db4329"
+        "GUID:7e4fb08fa6780a24dacd2e4b01db4329",
+        "GUID:4531bef733734924593d284af7afedae",
+        "GUID:391139349729fee438583173fb741320",
+        "GUID:0c0c8357443d62a4c9e55fe39d3a3e51"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

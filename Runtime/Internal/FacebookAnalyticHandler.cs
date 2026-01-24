@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using Facebook.Unity;
-using Logger = Ared.Core.Internal.Logger;
+using Ared.Core.Internal;
 
 namespace Ared.Core.Internal
 {
-    public class FacebookAnalyticHandler
+    public class FacebookAnalyticHandler : ILogOrigin
     {
+        public ILogOrigin Logger => this;
+        public ELogOrigin LogOrigin => ELogOrigin.Analytics;
+        
         public FacebookAnalyticHandler()
         {
-            Logger.Log("Is Facebook Initialized: " + FB.IsInitialized, Logger.LogOrigin.Analytics);
+            Logger.Log("Is Facebook Initialized: " + FB.IsInitialized);
             
             if (!FB.IsInitialized)
             {
@@ -30,11 +33,11 @@ namespace Ared.Core.Internal
                 FB.ActivateApp();
                 // Continue with Facebook SDK
                 // ...
-                Logger.Log("Initialized the Facebook SDK", Logger.LogOrigin.Analytics);
+                Logger.Log("Initialized the Facebook SDK");
             }
             else
             {
-                Logger.Log("Failed to Initialize the Facebook SDK", Logger.LogOrigin.Analytics);
+                Logger.Log("Failed to Initialize the Facebook SDK");
             }
         }
 

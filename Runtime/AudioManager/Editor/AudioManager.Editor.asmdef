@@ -1,0 +1,19 @@
+{
+    "name": "AudioManager.Editor",
+    "rootNamespace": "Ared.Core",
+    "references": [
+        "GUID:391139349729fee438583173fb741320",
+        "GUID:06ff281547f7320439e39b5d6264750a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

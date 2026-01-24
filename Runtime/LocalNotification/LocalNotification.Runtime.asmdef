@@ -1,0 +1,19 @@
+{
+    "name": "LocalNotification.Runtime",
+    "rootNamespace": "Ared.Core",
+    "references": [
+        "GUID:776d03a35f1b52c4a9aed9f56d7b4229",
+        "GUID:ac145e6b8c6034cdbadc8c6e26aedbcf",
+        "GUID:1e8e55397bd004beaba78a667566665f",
+        "GUID:06ff281547f7320439e39b5d6264750a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
